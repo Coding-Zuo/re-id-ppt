@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/league.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                Spatial-Temporal Graph Convolutional Network for Video-based Person Re-identification(CVPR2020)
+                <br>
+                <hr>
+                <p style="position: relative;left: 20%;margin-top: 10%;">20032202050 左玉晖</p>
+            </section>
+
+
+        </section>
+
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>Person Re-identification</h2>
+                <p>简称为ReID，是利用计算机视觉技术判断图像或者视频序列中是否存在特定行人的技术。广泛被认为是一个图像检索的子问题。给定一个监控行人图像，检索跨设备下的该行人图像。</p>
+            </section>
+            <aside class="notes">
+                就是我在这个光照视角下检测到这个行人，我换个摄像头换个环境视角还想要能检测到这个行人。
+            </aside>
+            <!--            <section>-->
+            <!--                <h2>The Lorenz Equations</h2>-->
+            <!--                \[\begin{aligned}-->
+            <!--                \dot{x} &amp; = \sigma(y-x) \\-->
+            <!--                \dot{y} &amp; = \rho x - y - xz \\-->
+            <!--                \dot{z} &amp; = -\beta z + xy-->
+            <!--                \end{aligned} \]-->
+            <!--            </section>-->
+
+            <section data-background-transition="zoom">
+                <h3>行人重识别可以干什么？</h3>
+<!--                <video data-autoplay src="image/120199711-1-208.mp4"></video>-->
+                <img src="image/1608880158932.jpg">
+                <aside class="notes">
+                    比如去迪士尼，把小孩弄丢了，摄像头多，人工找又慢有难。
+                    相似度计算问题
+                    智能安防
+                    人机交互
+                    无人超市
+                    覆盖面很广的场所，视频监控，代替人去找。
+                    延伸的还有车辆重识别、动物重识别
+                </aside>
+            </section>
+
+
+            <!--            <section data-background-transition="zoom">-->
+            <!--                <h5 style="float: left;position: absolute;">ReID方法</h5>-->
+            <!--                <p class="fragment">基于表征学习的ReID方法</p>-->
+            <!--                <p class="fragment">基于度量学习的ReID方法</p>-->
+            <!--                <p class="fragment">基于局部特征的ReID方法</p>-->
+            <!--                <p class="fragment">基于GAN造图的ReID方法</p>-->
+            <!--                <p class="fragment">基于视频序列的ReID方法</p>-->
+            <!--            </section>-->
+
+            <!--            <section data-background-transition="zoom">-->
+            <!--                <h5>基于视频序列的ReID方法</h5>-->
+            <!--                <p>基于视频序列的方法最主要的不同点就是这类方法不仅考虑了图像的内容信息，还考虑了帧与帧之间的运动信息等</p>-->
+            <!--            </section>-->
+
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>前人工作及存在问题</h2>
+                <hr>
+                <p class="fragment">不同下摄像头造成行人外观的巨大变化</p>
+                <p class="fragment">目标遮挡（Occlusion）导致部分特征丢失</p>
+                <p class="fragment">不同的光照导致同一目标的特征差异</p>
+                <p class="fragment">不同目标衣服颜色近似、特征近似导致区分度下降</p>
+                <aside class="notes">
+                    这也是行人重识别领域面对的普遍问题，对是否能解决解决什么程度有所怀疑。我认为通过这种网络模型变换不可能本质上的提升。
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <img src="image/1608882006023.jpg">
+                <aside class="notes">
+                    不清晰变清晰，加超分辨率重构
+                    遮挡，最难（论文好像除了视频解决没什么解决办法）
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <h2>基于视频序列的ReID方法</h2>
+                <hr>
+                <p class="fragment">CNN & RNN</p>
+                <p class="fragment">AMOC(光流法)</p>
+                <p class="fragment">temporal pooling & spatial-temporal attenttion</p>
+
+                <aside class="notes">
+                    CNN & RNN 建模效果有限，或者由于其复杂的结构而难以训练。
+                    AMOC(光流法) 通常提取光流信息需要用到传统的光流提取算法，但是这些算法计算耗时，并且无法与深度学习网络兼容，并且光流对于遮挡和噪声来说不够健壮。
+                    temporal pooling & spatial-temporal attenttion 这些方法没有充分考虑人体各部分在不同帧之间的时间关系，效果有限。
+                </aside>
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <h3>论文对挑战的解决</h3>
+            <hr>
+            <section>
+                <p class="fragment">1、仅使用外观特征不足以区分，但它们的身体结构信息是不同的。</p>
+                <p class="fragment">办法：利用序列中各部分之间的时空关系可以缓解这些问题。</p>
+            </section>
+            <section>
+                <p class="fragment">
+                    2.当边界框不完美，或者存在噪声或遮挡时，基于外观的要素可能效果较差，并且基于图像的re-ID在这种情况下可能不能很好地工作。</p>
+                <p class="fragment">办法：显式地利用不同帧之间补丁的时间关系，以缓解遮挡和不对准问题。</p>
+            </section>
+            <section>
+                <p class="fragment">
+                    3.基于图像的识别最具挑战性的难点之一是如何区分视觉上相似的身份，而大多数基于图像的方法只能依赖于提取细粒度的外观特征。</p>
+                <p class="fragment">
+                    办法：在基于视频的Re-ID中，相同身份的结构信息(例如形状信息)将更加完整和精确，因为每个视频具有许多帧，这些帧可能覆盖更多的视图和姿势。</p>
+            </section>
+
+
+            <aside class="notes">
+                具体地说，通过连接不同帧的所有块来构建图来建模时间关系，目的是提供不同块之间的互补信息，从而缓解拥塞和错位问题。
+                另一方面，我们还考虑了帧内的结构信息，通过为视频中的每一帧构造补丁图来提供互补的外观信息。
+                创新性可能不足。
+            </aside>
+        </section>
+
+        <section data-background-transition="zoom">
+            <!--            <section data-background-transition="zoom">-->
+            <h2>创新点、贡献</h2>
+            <hr>
+            <!--            </section>-->
+            <section>
+                1、利用GCN来模拟人体不同部位在一帧内和帧间的潜在关系，为人们提供更具鉴别力和鲁棒性的信息
+                <br>(这个地方可以进一步改进)
+            </section>
+            <section>
+                2、提出了时空GCN框架来联合建模视频层的整体斑块关系和帧级的单个帧的结构信息，该框架可以学习斑块之间的区分和鲁棒的时空关系，从而促进基于视频的Re-ID。
+                <br>(有堆积模型的嫌疑)
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>模型设计</h2>
+                <hr>
+                <img src="image/1608813802389.jpg">
+            </section>
+
+            <section data-background-transition="zoom">
+                <h3>如何构建图结构</h3>
+                <hr>
+                <img src="image/1608814028654.jpg">
+            </section>
+
+
+            <section data-background-transition="zoom">
+                <h4>Temporal branch</h4>
+                <img src="image/1608816224035.jpg">
+            </section>
+
+            <section data-background-transition="zoom">
+                <h4>Structural GCN Module(spatial relations branch)</h4>
+                <img src="image/1608816551093.jpg">
+            </section>
+
+            <section data-background-transition="zoom">
+                <h4>loss function</h4>
+                <p>batch hard triplet和softmax cross-entropy</p>
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>实验对比</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h2>数据集</h2>
+                <hr>
+                <p> MARS: 有1261个身份id，的17503个tracklet和3,248个distractor序列。</p>
+                <p> DukeMTMC-VideoReID: 有1812个身份id，4832个tracklets</p>
+                <!--                <p>-->
+                <!--                    评估协议：累积匹配特性曲线（CMC）和平均精度（mAP）来评价提出的模型的性能。-->
+                <!--                </p>-->
+                <aside class="notes">
+                    中山大学今年有个新的数据集，史上最大数据集SYSU-30k，
+                    「弱监督」行人重识别数据集。
+                    还有个问题现在数据集基本全是基于学校来做的，在工厂在商城可能效果不好，
+                    最大问题是如何落地，很多论文跨域全完蛋。
+                    还有对抗攻击的伪装。(少见)
+                </aside>
+            </section>
+            <section data-background-transition="zoom">
+                <h2>对比其他模型</h2>
+                <hr>
+                <img src="image/16072613433181.jpg" width="400px" height="500px">
+            </section>
+            <section data-background-transition="zoom">
+                <h2>三分支搭配对比</h2>
+                <hr>
+                <img src="image/16072629848124.jpg">
+            </section>
+            <section data-background-transition="zoom">
+                <h2>与全连接对比提现GCN必要</h2>
+                <hr>
+                <img src="image/16072717851849.jpg">
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>结论</h2>
+                <p>1.利用斑块间的时间关系缓解遮挡问题</p>
+                <p>利用斑块间的空间关系区分外观相似的歧义样本的有效性。</p>
+                </p>2.提出STGCN模型</p>
+                <p>SGCN:空间分支通过建模各帧面片之间的关系来学习人体的结构信息。</p>
+                <p>TGCN:时态分支通过对不同帧之间的斑块的时态关系进行建模，可以缓解遮挡问题。</p>
+            </section>
+
+            <section>
+                <p>
+                    采用GNN的特性对提取的行人结构特征进行图建模(空域)，并通过时空图卷积挖掘帧内和帧间的潜在关系(时域)。把他们做联合，增强了区分能力和学习的鲁棒性，对基于视频序列的行人重识别领域中存在遮挡噪声识别性不强的问题，进行了有效解决。</p>
+                <aside class="notes">
+                    用一句话总结这篇论文。那么什么是行人重识别？什么又是时空图卷积呢
+                </aside>
+            </section>
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                Spatial-Temporal Graph Convolutional Network
+                <!--						<br><p style="float: left;position: absolute">对题目设问</p>-->
+                <br>
+                <p class="fragment">图结构如何设计?</p>
+                <p class="fragment">边关系如何确定?</p>
+                <p class="fragment">针对图网络的什么任务进行改进?</p>
+
+            </section>
+
+            <section data-background-transition="zoom">
+                <h2>GCN</h2>
+            </section>
+
+        </section>
+
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>未来方向，存在问题</h2>
+
+            </section>
+
+            <section data-background-transition="zoom">
+                <p> High-Order Information Matters: Learning Relation and Topology for Occluded Person
+                    Re-Identiﬁcation(CVPR2020)</p>
+                <p class="fragment">1.关键点局部特征提取</p>
+                <p class="fragment">2.图卷积融合关键点特征</p>
+                <p class="fragment">3.基于图匹配的方式来计算相似度并训练模型</p>
+                <aside class="notes">
+                    这里不得不提到，也是CVPR2020旷世研究院的一篇论文。
+                    主要解决遮蔽问题。而不是单纯的像他那样把图片画成一块一块的，我觉得这篇论文有点水网络结构。
+                    提出了三阶段的模型：1. 关键点局部特征提取；2. 图卷积融合关键点特征 3. 基于图匹配的方式来计算相似度并训练模型。
+                    可以套人脸识别。
+                    数据集:Occluded- DUKEMTMC (querys 里全是遮蔽现象的数据）
+                </aside>
+            </section>
+
+            <section data-background-transition="zoom">
+                <img src="image/1608801804504.jpg">
+                <aside class="notes">
+
+                </aside>
+            </section>
+        </section>
+
+
+        <!-- <section data-markdown data-separator="---" data-separator-vertical="--"  >
+          <script type="text/template">
+            ## 关于Re-identification
+
+             <p>简称为ReID，是利用计算机视觉技术判断图像或者视频序列中是否存在特定行人的技术。广泛被认为是一个图像检索的子问题。给定一个监控行人图像，检索跨设备下的该行人图像。<p>
+            --
+            ## 主题1-内容1
+            内容1-细节1
+            --
+            ## 主题1-内容2
+            内容1-细节2
+            ---
+            # 主题2
+          </script>
+        </section>
+-->            </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        math: {
+            mathjax: 'plugin/MathJax.js',
+            config: 'TeX-AMS_HTML-full'  // 参考 http://docs.mathjax.org/en/latest/config-files.html
+        },
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            },
+            {src: 'plugin/math/math.js', async: true}
+        ]
+
+
+    });
+</script>
+</body>
+</html>
