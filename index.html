@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Spatial-Temporal Graph Convolutional Network for Video-based Person Re-identification(CVPR2020)</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/league.css">
@@ -56,7 +56,7 @@
 
             <section data-background-transition="zoom">
                 <h3>行人重识别可以干什么？</h3>
-<!--                <video data-autoplay src="image/120199711-1-208.mp4"></video>-->
+                <!--                <video data-autoplay src="image/120199711-1-208.mp4"></video>-->
                 <img src="image/1608880158932.jpg">
                 <aside class="notes">
                     比如去迪士尼，把小孩弄丢了，摄像头多，人工找又慢有难。
@@ -79,10 +79,13 @@
             <!--                <p class="fragment">基于视频序列的ReID方法</p>-->
             <!--            </section>-->
 
-            <!--            <section data-background-transition="zoom">-->
-            <!--                <h5>基于视频序列的ReID方法</h5>-->
-            <!--                <p>基于视频序列的方法最主要的不同点就是这类方法不仅考虑了图像的内容信息，还考虑了帧与帧之间的运动信息等</p>-->
-            <!--            </section>-->
+            <section data-background-transition="zoom">
+                <h3>时空图卷积，图结构</h3>
+                <hr>
+                <p class="fragment">图像中结点的定义是什么？</p>
+                <p class="fragment">结点和结点之间的联系是什么？(边)</p>
+                <p class="fragment">结点的内在含义是什么？</p>
+            </section>
 
 
         </section>
@@ -100,6 +103,8 @@
                 </aside>
             </section>
             <section data-background-transition="zoom">
+                <h3>我的想法可不可以加超分辨率重构？</h3>
+                <hr>
                 <img src="image/1608882006023.jpg">
                 <aside class="notes">
                     不清晰变清晰，加超分辨率重构
@@ -107,20 +112,32 @@
                 </aside>
             </section>
 
-            <section data-background-transition="zoom">
-                <h2>基于视频序列的ReID方法</h2>
-                <hr>
-                <p class="fragment">CNN & RNN</p>
-                <p class="fragment">AMOC(光流法)</p>
-                <p class="fragment">temporal pooling & spatial-temporal attenttion</p>
+        </section>
 
-                <aside class="notes">
-                    CNN & RNN 建模效果有限，或者由于其复杂的结构而难以训练。
-                    AMOC(光流法) 通常提取光流信息需要用到传统的光流提取算法，但是这些算法计算耗时，并且无法与深度学习网络兼容，并且光流对于遮挡和噪声来说不够健壮。
-                    temporal pooling & spatial-temporal attenttion 这些方法没有充分考虑人体各部分在不同帧之间的时间关系，效果有限。
-                </aside>
+        <section data-background-transition="zoom">
+            <h2>基于视频序列的ReID方法</h2>
+            <hr>
+            <section data-transition="slide-in fade-out">
+                <br>
+                <p>CNN & RNN</p>
+                <img src="image/1608721226762.jpg" width="500px" height="401">
+            </section>
+            <section data-transition="slide-in fade-out">
+                <br>
+                <p>temporal pooling & spatial-temporal attenttion</p>
+                <p>综合考虑空间位置和特征度深度之间的关系</p>
+                <img src="image/1609296760034.jpg" width="850px" height="301">
+            </section>
+            <section data-transition="slide-in fade-out">
+                <p>AMOC(光流法)</p>
+                <img src="image/1609296760034.jpg" class="fragment">
             </section>
 
+            <aside class="notes">
+                CNN & RNN 建模效果有限，或者由于其复杂的结构而难以训练。
+                AMOC(光流法) 通常提取光流信息需要用到传统的光流提取算法，但是这些算法计算耗时，并且无法与深度学习网络兼容，并且光流对于遮挡和噪声来说不够健壮。
+                temporal pooling & spatial-temporal attenttion 这些方法没有充分考虑人体各部分在不同帧之间的时间关系，效果有限。
+            </aside>
         </section>
 
         <section data-background-transition="zoom">
@@ -128,7 +145,7 @@
             <hr>
             <section>
                 <p class="fragment">1、仅使用外观特征不足以区分，但它们的身体结构信息是不同的。</p>
-                <p class="fragment">办法：利用序列中各部分之间的时空关系可以缓解这些问题。</p>
+                <p class="fragment">办法：利用序列中各部分之间的时空关系可以缓解这些问题。(STGCN)</p>
             </section>
             <section>
                 <p class="fragment">
@@ -142,7 +159,6 @@
                     办法：在基于视频的Re-ID中，相同身份的结构信息(例如形状信息)将更加完整和精确，因为每个视频具有许多帧，这些帧可能覆盖更多的视图和姿势。</p>
             </section>
 
-
             <aside class="notes">
                 具体地说，通过连接不同帧的所有块来构建图来建模时间关系，目的是提供不同块之间的互补信息，从而缓解拥塞和错位问题。
                 另一方面，我们还考虑了帧内的结构信息，通过为视频中的每一帧构造补丁图来提供互补的外观信息。
@@ -151,32 +167,18 @@
         </section>
 
         <section data-background-transition="zoom">
-            <!--            <section data-background-transition="zoom">-->
-            <h2>创新点、贡献</h2>
+            <h3>如何构建图结构</h3>
             <hr>
-            <!--            </section>-->
-            <section>
-                1、利用GCN来模拟人体不同部位在一帧内和帧间的潜在关系，为人们提供更具鉴别力和鲁棒性的信息
-                <br>(这个地方可以进一步改进)
-            </section>
-            <section>
-                2、提出了时空GCN框架来联合建模视频层的整体斑块关系和帧级的单个帧的结构信息，该框架可以学习斑块之间的区分和鲁棒的时空关系，从而促进基于视频的Re-ID。
-                <br>(有堆积模型的嫌疑)
-            </section>
-
+            <p>将局部特征关系融合</p>
+            <img src="image/1609295413363.jpg">
         </section>
+
 
         <section data-background-transition="zoom">
             <section data-background-transition="zoom">
                 <h2>模型设计</h2>
                 <hr>
                 <img src="image/1608813802389.jpg">
-            </section>
-
-            <section data-background-transition="zoom">
-                <h3>如何构建图结构</h3>
-                <hr>
-                <img src="image/1608814028654.jpg">
             </section>
 
 
@@ -217,6 +219,13 @@
                     还有对抗攻击的伪装。(少见)
                 </aside>
             </section>
+
+            <section data-background-transition="zoom">
+                <h2>评估标准</h2>
+                <hr>
+                <p>rank1 && rank5</p>
+            </section>
+
             <section data-background-transition="zoom">
                 <h2>对比其他模型</h2>
                 <hr>
@@ -236,11 +245,31 @@
         </section>
 
         <section data-background-transition="zoom">
-            <section data-background-transition="zoom">
-                <h2>结论</h2>
+            <!--            <section data-background-transition="zoom">-->
+            <h2>创新点、贡献</h2>
+            <hr>
+            <!--            </section>-->
+            <section>
+                1、利用GCN来模拟人体不同部位在一帧内和帧间的潜在关系，为人们提供更具鉴别力和鲁棒性的信息
+                <br>(这个地方可以进一步改进)
+            </section>
+            <section>
+                2、提出了时空GCN框架来联合建模视频层的整体斑块关系和帧级的单个帧的结构信息，该框架可以学习斑块之间的区分和鲁棒的时空关系，从而促进基于视频的Re-ID。
+                <br>(有堆积模型的嫌疑)
+            </section>
+
+        </section>
+
+        <section data-background-transition="zoom">
+            <h2>结论</h2>
+            <hr>
+            <section>
                 <p>1.利用斑块间的时间关系缓解遮挡问题</p>
                 <p>利用斑块间的空间关系区分外观相似的歧义样本的有效性。</p>
-                </p>2.提出STGCN模型</p>
+            </section>
+
+            <section>
+                <p>2.提出STGCN模型</p>
                 <p>SGCN:空间分支通过建模各帧面片之间的关系来学习人体的结构信息。</p>
                 <p>TGCN:时态分支通过对不同帧之间的斑块的时态关系进行建模，可以缓解遮挡问题。</p>
             </section>
@@ -256,17 +285,7 @@
 
         <section data-background-transition="zoom">
             <section data-background-transition="zoom">
-                Spatial-Temporal Graph Convolutional Network
-                <!--						<br><p style="float: left;position: absolute">对题目设问</p>-->
-                <br>
-                <p class="fragment">图结构如何设计?</p>
-                <p class="fragment">边关系如何确定?</p>
-                <p class="fragment">针对图网络的什么任务进行改进?</p>
-
-            </section>
-
-            <section data-background-transition="zoom">
-                <h2>GCN</h2>
+                <h2>从GCN公式角度看如何建模</h2>
             </section>
 
         </section>
@@ -281,9 +300,11 @@
             <section data-background-transition="zoom">
                 <p> High-Order Information Matters: Learning Relation and Topology for Occluded Person
                     Re-Identiﬁcation(CVPR2020)</p>
-                <p class="fragment">1.关键点局部特征提取</p>
-                <p class="fragment">2.图卷积融合关键点特征</p>
-                <p class="fragment">3.基于图匹配的方式来计算相似度并训练模型</p>
+                <hr>
+                <p>关键点局部特征提取+图卷积融合关键点特征+图匹配特征融合计算相似度并训练模型</p>
+                <!--                <p class="fragment">2.图卷积融合关键点特征</p>-->
+                <!--                <p class="fragment">3.基于图匹配的方式来计算相似度并训练模型</p>-->
+                <img src="image/1608801804504.jpg">
                 <aside class="notes">
                     这里不得不提到，也是CVPR2020旷世研究院的一篇论文。
                     主要解决遮蔽问题。而不是单纯的像他那样把图片画成一块一块的，我觉得这篇论文有点水网络结构。
@@ -294,7 +315,6 @@
             </section>
 
             <section data-background-transition="zoom">
-                <img src="image/1608801804504.jpg">
                 <aside class="notes">
 
                 </aside>
