@@ -82,12 +82,15 @@
             <section data-background-transition="zoom">
                 <h3>时空图卷积，图结构</h3>
                 <hr>
-                <p class="fragment">图像中结点的定义是什么？</p>
+                <p class="fragment">图结构中结点的定义是什么？</p>
                 <p class="fragment">结点和结点之间的联系是什么？(边)</p>
                 <p class="fragment">结点的内在含义是什么？</p>
             </section>
-
-
+            <aside class="notes">
+                我们现在使用的rnncnn等处理的数据，都是在欧式空间下来进行建模的，
+                CNN的数据是线性数据，比如音频、图片。GNN的数据主要是关系型数据。
+                GNN 在对图形中节点间的依赖关系进行建模方面能力强大，使得图分析相关的研究领域取得了突破性进展。
+            </aside>
         </section>
 
         <section data-background-transition="zoom">
@@ -103,7 +106,7 @@
                 </aside>
             </section>
             <section data-background-transition="zoom">
-                <h3>我的想法可不可以加超分辨率重构？</h3>
+                <p>和人脸识别那种，高清的对齐的图像不同</p>
                 <hr>
                 <img src="image/1608882006023.jpg">
                 <aside class="notes">
@@ -130,7 +133,7 @@
             </section>
             <section data-transition="slide-in fade-out">
                 <p>AMOC(光流法)</p>
-                <img src="image/1609296760034.jpg" class="fragment">
+                <img src="image/1609563374284.jpg" width="500" height="360">
             </section>
 
             <aside class="notes">
@@ -170,7 +173,10 @@
             <h3>如何构建图结构</h3>
             <hr>
             <p>将局部特征关系融合</p>
-            <img src="image/1609295413363.jpg">
+            <img src="image/1609295413363.jpg" width="600px" height="400px">
+            <aside class="notes">
+                邻接矩阵只能写1，关系紧密程度不能表示，只是个一阶语义。
+            </aside>
         </section>
 
 
@@ -194,9 +200,30 @@
 
             <section data-background-transition="zoom">
                 <h4>loss function</h4>
-                <p>batch hard triplet和softmax cross-entropy</p>
+                <hr>
+                <p>batch hard triplet && softmax cross-entropy</p>
+                <p>Triplet loss 需要三份数据(可以从一个batch中选择)</p>
+                <img class="r-stretch" src="image/1609302428169.jpg" width="600px" height="400px">
+                <aside class="notes">
+                    其中Anchor表示当前数据，Positive是跟A相同人的数据，Negative是不同人的数据。
+                    当前向量、同一人不同向量、不同人不同向量
+                    将一个图像经过特征提取后是一个向量，让这个向量和postive更近更好，让这个向量和negative越远越好。
+                </aside>
             </section>
 
+        </section>
+
+        <section data-background-transition="zoom">
+            <section data-background-transition="zoom">
+                <h2>从GCN公式角度看如何建模</h2>
+            </section>
+            <section>
+                <h3>空域角度GCN</h3>
+                <hr>
+                <p>\[\begin{aligned}
+                Z = \sigma(A'FW+b)
+                \end{aligned} \]<p>
+            </section>
         </section>
 
         <section data-background-transition="zoom">
@@ -224,10 +251,12 @@
                 <h2>评估标准</h2>
                 <hr>
                 <p>rank1 && rank5</p>
+                <p>mAP值</p>
+                <img src="image/1609565283548.jpg" >
             </section>
 
             <section data-background-transition="zoom">
-                <h2>对比其他模型</h2>
+                <h2>对比其他模型(怀疑)</h2>
                 <hr>
                 <img src="image/16072613433181.jpg" width="400px" height="500px">
             </section>
@@ -283,18 +312,19 @@
             </section>
         </section>
 
-        <section data-background-transition="zoom">
-            <section data-background-transition="zoom">
-                <h2>从GCN公式角度看如何建模</h2>
-            </section>
 
-        </section>
 
 
         <section data-background-transition="zoom">
             <section data-background-transition="zoom">
                 <h2>未来方向，存在问题</h2>
 
+            </section>
+            <section>
+                <p>超分辨率重构</p>
+                <p>基于人体骨骼关键点</p>
+                <p>各种各样的方法很多</p>
+                <p>现在跨域的问题比较难解决，怎么落地？</p>
             </section>
 
             <section data-background-transition="zoom">
@@ -315,10 +345,11 @@
             </section>
 
             <section data-background-transition="zoom">
-                <aside class="notes">
-
-                </aside>
+                <h2>Thank you</h2>
             </section>
+            <aside class="notes">
+                比如，一个图像用resnet提出1024维特征在一万个人里计算余弦相似度或者欧式距离做相似计算。其实没这么简单。
+            </aside>
         </section>
 
 
