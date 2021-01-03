@@ -97,10 +97,10 @@
             <section data-background-transition="zoom">
                 <h2>前人工作及存在问题</h2>
                 <hr>
-                <p class="fragment">不同下摄像头造成行人外观的巨大变化</p>
+                <p class="fragment">不同摄像头造成行人外观的巨大变化</p>
                 <p class="fragment">目标遮挡（Occlusion）导致部分特征丢失</p>
                 <p class="fragment">不同的光照导致同一目标的特征差异</p>
-                <p class="fragment">不同目标衣服颜色近似、特征近似导致区分度下降</p>
+                <p class="fragment">不同目标衣服颜色、特征近似导致区分度下降</p>
                 <aside class="notes">
                     这也是行人重识别领域面对的普遍问题，对是否能解决解决什么程度有所怀疑。我认为通过这种网络模型变换不可能本质上的提升。
                 </aside>
@@ -147,12 +147,12 @@
             <h3>论文对挑战的解决</h3>
             <hr>
             <section>
-                <p class="fragment">1、仅使用外观特征不足以区分，但它们的身体结构信息是不同的。</p>
+                <p class="fragment">1、仅使用外观特征不足以区分目标，但它们的身体结构信息是不同的。</p>
                 <p class="fragment">办法：利用序列中各部分之间的时空关系可以缓解这些问题。(STGCN)</p>
             </section>
             <section>
                 <p class="fragment">
-                    2.当边界框不完美，或者存在噪声或遮挡时，基于外观的要素可能效果较差，并且基于图像的re-ID在这种情况下可能不能很好地工作。</p>
+                    2.当边界框不完美，或者存在噪声或遮挡时，基于外观的要素可能效果不好。</p>
                 <p class="fragment">办法：显式地利用不同帧之间补丁的时间关系，以缓解遮挡和不对准问题。</p>
             </section>
             <section>
@@ -185,6 +185,7 @@
                 <h2>模型设计</h2>
                 <hr>
                 <img src="image/1608813802389.jpg">
+                <a href="http://10.12.1.150:8888/lab" target="_blank">code</a>
             </section>
 
 
@@ -215,14 +216,53 @@
 
         <section data-background-transition="zoom">
             <section data-background-transition="zoom">
-                <h2>从GCN公式角度看如何建模</h2>
+                <h2>从GCN公式角度看如何建模(空域)</h2>
+            </section>
+            <section data-background-transition="zoom">
+                <h2>GCN机制</h2>
+                <hr>
+                <p class="fragment">信息传递&信息聚合&信息更新</p>
+                <img src="image/1609607176681.jpg">
             </section>
             <section>
-                <h3>空域角度GCN</h3>
+                <h3>构建图</h3>
                 <hr>
+                <p class="fragment">
+                    G(V,E) 每个patch作为V节点，E是他们之间的关系边
+                <p>
+                <p class="fragment">构建边\[\begin{aligned}
+                    e(x_i,x_j) = \Phi(x_i)^T\Phi(x_j)
+                    \end{aligned} \]
+                <p>
+                <p class="fragment">邻接矩阵归一化\[\begin{aligned}
+                    A_{(i,j)} = \frac {e^2(x_i,x_j)}{\sum_{j=1}^N e^2(x_i,x_j)}
+                    \end{aligned} \]
+                <p>
+            </section>
+            <section>
+                <h3>信息传递&信息聚合</h3>
+                <hr>
+                <p>邻接矩阵A和所有节点的特征向量F进行相乘，获取其他节点特征信息</p>
                 <p>\[\begin{aligned}
-                Z = \sigma(A'FW+b)
-                \end{aligned} \]<p>
+                    \hat A=A+\lambda I
+                    \end{aligned} \]
+                <p>
+                <p>
+                    左乘一个度矩阵右乘一个度矩阵，再归一化\[\begin{aligned}
+                    A'=\hat D^{-\frac {1}{2}}\hat A\hat D^{-\frac {1}{2}}
+                    \end{aligned} \]
+                <p>
+                <p class="fragment">
+                    \[\begin{aligned}
+                    Z=\sigma(A'FW+b)
+                    \end{aligned} \]
+                <p>
+                <p class="fragment">
+                    \[\begin{aligned}
+                    Z=f(X,A)=softmax(\hat A'_1 \sigma(\hat A'_0 XW^{(0)}) W^{(1)} )
+                    \end{aligned} \]
+                <p>
+
             </section>
         </section>
 
@@ -252,7 +292,7 @@
                 <hr>
                 <p>rank1 && rank5</p>
                 <p>mAP值</p>
-                <img src="image/1609565283548.jpg" >
+                <img src="image/1609565283548.jpg">
             </section>
 
             <section data-background-transition="zoom">
@@ -313,8 +353,6 @@
         </section>
 
 
-
-
         <section data-background-transition="zoom">
             <section data-background-transition="zoom">
                 <h2>未来方向，存在问题</h2>
@@ -344,14 +382,19 @@
                 </aside>
             </section>
 
-            <section data-background-transition="zoom">
-                <h2>Thank you</h2>
+            <section>
+                <p>两层GCN如何设计可以加深加复杂网络模型？</p>
+                <p>解决GCN过平滑问题</p>
             </section>
+
             <aside class="notes">
                 比如，一个图像用resnet提出1024维特征在一万个人里计算余弦相似度或者欧式距离做相似计算。其实没这么简单。
             </aside>
         </section>
 
+        <section data-background-transition="zoom">
+            <h2>Thank you Bye</h2>
+        </section>
 
         <!-- <section data-markdown data-separator="---" data-separator-vertical="--"  >
           <script type="text/template">
