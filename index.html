@@ -228,31 +228,6 @@
                 <h3>构建图</h3>
                 <hr>
                 <p class="fragment">
-                    G(V,E) 每个patch作为V节点，E是他们之间的关系边
-                <p>
-                <p class="fragment">构建边\[\begin{aligned}
-                    e(x_i,x_j) = \Phi(x_i)^T\Phi(x_j)
-                    \end{aligned} \]
-                <p>
-                <p class="fragment">邻接矩阵归一化\[\begin{aligned}
-                    A_{(i,j)} = \frac {e^2(x_i,x_j)}{\sum_{j=1}^N e^2(x_i,x_j)}
-                    \end{aligned} \]
-                <p>
-            </section>
-            <section>
-                <h3>信息传递&信息聚合</h3>
-                <hr>
-                <p>邻接矩阵A和所有节点的特征向量F进行相乘，获取其他节点特征信息</p>
-                <p>\[\begin{aligned}
-                    \hat A=A+\lambda I
-                    \end{aligned} \]
-                <p>
-                <p>
-                    左乘一个度矩阵右乘一个度矩阵，再归一化\[\begin{aligned}
-                    A'=\hat D^{-\frac {1}{2}}\hat A\hat D^{-\frac {1}{2}}
-                    \end{aligned} \]
-                <p>
-                <p class="fragment">
                     \[\begin{aligned}
                     Z=\sigma(A'FW+b)
                     \end{aligned} \]
@@ -264,6 +239,42 @@
                 <p>
 
             </section>
+<!--            <section>-->
+<!--                <h3>信息传递&信息聚合</h3>-->
+<!--                <hr>-->
+<!--                <p class="fragment">-->
+<!--                    G(V,E) 每个patch作为V节点，E是他们之间的关系边-->
+<!--                <p>-->
+<!--                <p class="fragment">构建边\[\begin{aligned}-->
+<!--                    e(x_i,x_j) = \Phi(x_i)^T\Phi(x_j)-->
+<!--                    \end{aligned} \]-->
+<!--                <p>-->
+<!--                <p class="fragment">邻接矩阵归一化\[\begin{aligned}-->
+<!--                    A_{(i,j)} = \frac {e^2(x_i,x_j)}{\sum_{j=1}^N e^2(x_i,x_j)}-->
+<!--                    \end{aligned} \]-->
+<!--                <p>-->
+<!--                <p>邻接矩阵A和所有节点的特征向量F进行相乘，获取其他节点特征信息</p>-->
+<!--                <p>\[\begin{aligned}-->
+<!--                    \hat A=A+\lambda I-->
+<!--                    \end{aligned} \]-->
+<!--                <p>-->
+<!--                <p>-->
+<!--                    左乘一个度矩阵右乘一个度矩阵，再归一化\[\begin{aligned}-->
+<!--                    A'=\hat D^{-\frac {1}{2}}\hat A\hat D^{-\frac {1}{2}}-->
+<!--                    \end{aligned} \]-->
+<!--                <p>-->
+<!--&lt;!&ndash;                <p class="fragment">&ndash;&gt;-->
+<!--&lt;!&ndash;                    \[\begin{aligned}&ndash;&gt;-->
+<!--&lt;!&ndash;                    Z=\sigma(A'FW+b)&ndash;&gt;-->
+<!--&lt;!&ndash;                    \end{aligned} \]&ndash;&gt;-->
+<!--&lt;!&ndash;                <p>&ndash;&gt;-->
+<!--&lt;!&ndash;                <p class="fragment">&ndash;&gt;-->
+<!--&lt;!&ndash;                    \[\begin{aligned}&ndash;&gt;-->
+<!--&lt;!&ndash;                    Z=f(X,A)=softmax(\hat A'_1 \sigma(\hat A'_0 XW^{(0)}) W^{(1)} )&ndash;&gt;-->
+<!--&lt;!&ndash;                    \end{aligned} \]&ndash;&gt;-->
+<!--&lt;!&ndash;                <p>&ndash;&gt;-->
+
+<!--            </section>-->
         </section>
 
         <section data-background-transition="zoom">
